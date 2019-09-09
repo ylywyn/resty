@@ -118,6 +118,9 @@ import "github.com/go-resty/resty/v2"
 
 ```go
 // Create a Resty Client
+// resty.New()
+// resty.NewWithClient(...)
+// resty.NewWithLocalAddr(...)
 client := resty.New()
 
 resp, err := client.R().
