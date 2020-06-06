@@ -337,8 +337,8 @@ func parseResponseBody(c *Client, res *Response) (err error) {
 		return
 	}
 	// Handles only JSON or XML content type
-	ct := firstNonEmpty(res.Request.forceContentType, res.Header().Get(hdrContentTypeKey), res.Request.fallbackContentType)
-	if IsJSONType(ct) || IsXMLType(ct) {
+	//ct := firstNonEmpty(res.Request.forceContentType, res.Header().Get(hdrContentTypeKey), res.Request.fallbackContentType)
+	//if IsJSONType(ct) || IsXMLType(ct) {
 		// HTTP status code > 199 and < 300, considered as Result
 		if res.IsSuccess() {
 			res.Request.Error = nil
@@ -359,7 +359,7 @@ func parseResponseBody(c *Client, res *Response) (err error) {
 				err = Unmarshalc(c, ct, res.body, res.Request.Error)
 			}
 		}
-	}
+	//}
 
 	return
 }
