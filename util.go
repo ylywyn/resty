@@ -109,6 +109,8 @@ func Unmarshalc(c *Client, ct string, b []byte, d interface{}) (err error) {
 		err = c.JSONUnmarshal(b, d)
 	} else if IsXMLType(ct) {
 		err = xml.Unmarshal(b, d)
+	} else {
+		err = c.JSONUnmarshal(b, d)
 	}
 
 	return

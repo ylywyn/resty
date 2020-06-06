@@ -337,28 +337,28 @@ func parseResponseBody(c *Client, res *Response) (err error) {
 		return
 	}
 	// Handles only JSON or XML content type
-	//ct := firstNonEmpty(res.Request.forceContentType, res.Header().Get(hdrContentTypeKey), res.Request.fallbackContentType)
+	ct := firstNonEmpty(res.Request.forceContentType, res.Header().Get(hdrContentTypeKey), res.Request.fallbackContentType)
 	//if IsJSONType(ct) || IsXMLType(ct) {
-		// HTTP status code > 199 and < 300, considered as Result
-		if res.IsSuccess() {
-			res.Request.Error = nil
-			if res.Request.Result != nil {
-				err = Unmarshalc(c, ct, res.body, res.Request.Result)
-				return
-			}
+	// HTTP status code > 199 and < 300, considered as Result
+	if res.IsSuccess() {
+		res.Request.Error = nil
+		if res.Request.Result != nil {
+			err = Unmarshalc(c, ct, res.body, res.Request.Result)
+			return
+		}
+	}
+
+	// HTTP status code > 399, considered as Error
+	if res.IsError() {
+		// global error interface
+		if res.Request.Error == nil && c.Error != nil {
+			res.Request.Error = reflect.New(c.Error).Interface()
 		}
 
-		// HTTP status code > 399, considered as Error
-		if res.IsError() {
-			// global error interface
-			if res.Request.Error == nil && c.Error != nil {
-				res.Request.Error = reflect.New(c.Error).Interface()
-			}
-
-			if res.Request.Error != nil {
-				err = Unmarshalc(c, ct, res.body, res.Request.Error)
-			}
+		if res.Request.Error != nil {
+			err = Unmarshalc(c, ct, res.body, res.Request.Error)
 		}
+	}
 	//}
 
 	return
